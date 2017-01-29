@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <geneticpp/random.hpp>
+#include <randomcpp/random.hpp>
 #include <map>
 
 TEST_CASE( "Test for random", "[random]" ) {
