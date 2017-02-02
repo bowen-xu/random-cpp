@@ -2,37 +2,37 @@
 
 #include <algorithm>
 
-#include <randomcpp/random.hpp>
+#include <randomcpp.hpp>
 #include <map>
 
 TEST_CASE( "Test for random", "[random]" ) {
-   random::seed(1);
+   randomcpp::seed(1);
 
    SECTION ( "random float inside range" ) {
-      float rand_f = random::uniform(0, 0.5);
+      float rand_f = randomcpp::uniform(0, 0.5);
       REQUIRE(rand_f < 0.5);
       REQUIRE(rand_f > 0.0);
    }
 
    SECTION ( "random reset produces repeatable results" ) {
-      random::reset();
-      int rand_1 = random::randint(0, 100);
-      random::reset();
-      int rand_2 = random::randint(0, 100);
+      randomcpp::reset();
+      int rand_1 = randomcpp::randint(0, 100);
+      randomcpp::reset();
+      int rand_2 = randomcpp::randint(0, 100);
       REQUIRE(rand_1 == rand_2);
    }
 
    SECTION ( "different seeds, different results" ) {
-      random::seed(2);
-      int rand_1 = random::randint(0, 100);
-      random::seed(3);
-      int rand_2 = random::randint(0, 100);
+      randomcpp::seed(2);
+      int rand_1 = randomcpp::randint(0, 100);
+      randomcpp::seed(3);
+      int rand_2 = randomcpp::randint(0, 100);
       REQUIRE(rand_1 != rand_2);
    }
 
    SECTION ( "random vector all within range" ) {
-      random::seed(2);
-      auto rand_set = random::sample(0, 100, 20);
+      randomcpp::seed(2);
+      auto rand_set = randomcpp::sample(0, 100, 20);
       // Check the size
       REQUIRE(rand_set.size() == 20);
       // Check the range
@@ -43,8 +43,8 @@ TEST_CASE( "Test for random", "[random]" ) {
    }
 
    SECTION ( "random vector all unique" ) {
-      random::reset();
-      auto rand_set = random::sample(0, 100, 20, true);
+      randomcpp::reset();
+      auto rand_set = randomcpp::sample(0, 100, 20, true);
       // Check the size
       REQUIRE(rand_set.size() == 20);
       // Check for uniqueness
@@ -58,15 +58,15 @@ TEST_CASE( "Test for random", "[random]" ) {
    }
 
    SECTION ( "random vector invalid range" ) {
-      random::reset();
-      REQUIRE_THROWS(random::sample(0, 5, 20, true));
+      randomcpp::reset();
+      REQUIRE_THROWS(randomcpp::sample(0, 5, 20, true));
    }
 
    SECTION ( "guassian random" ) {
-      random::reset();
+      randomcpp::reset();
       std::map<int, int> hist;
       for (int n=0; n<10000; ++n) {
-         ++hist[std::round(random::gauss(5.0, 2.0))];
+         ++hist[std::round(randomcpp::gauss(5.0, 2.0))];
       }
       // Validate histogram
    }

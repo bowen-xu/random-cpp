@@ -1,23 +1,28 @@
-#include <randomcpp/random.hpp>
+#include <randomcpp.hpp>
 
-#include <algorithm>
-#include <ctime>
-#include <cstdlib>
-#include <stdexcept>
+#include <algorithm> // std::find
+#include <ctime>     // std::time
+#include <stdexcept> // std::range_error
 
-/*static*/ unsigned random::seed_value = 0;
-/*static*/ std::random_device random::rd;
+namespace randomcpp {
 
-void random::seed() {
+static unsigned seed_value = 0;
+static std::random_device rd;
+
+static void initialize() {
+   std::srand(seed_value);
+}
+
+void seed() {
    seed(static_cast<unsigned>(std::time(0)));
 }
 
-void random::seed(unsigned a) {
-   random::seed_value = a;
+void seed(unsigned a) {
+   seed_value = a;
    initialize();
 }
 
-void random::reset() {
+void reset() {
    initialize();
 }
 
@@ -25,11 +30,11 @@ int _randbelow(int n) {
    return std::rand() % n;
 }
 
-int random::randrange(int stop) {
+int randrange(int stop) {
    return randrange(0, stop);
 }
 
-int random::randrange(int start, int stop, int step /*=1*/) {
+int randrange(int start, int stop, int step /*=1*/) {
    int width = stop - start;
    if (step == 1 && width > 0) {
       return start + _randbelow(width);
@@ -54,34 +59,34 @@ int random::randrange(int start, int stop, int step /*=1*/) {
    return start + step * _randbelow(n);
 }
 
-int random::randint(int a, int b) {
-   return randrange(a, b+1);
+int randint(int a, int b) {
+   return randrange(a, b + 1);
 }
 
-bool random::probability(float probability_) {
+bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;
 }
 
-float random::uniform(float a, float b) {
+float uniform(float a, float b) {
    if (b < a) {
-      throw std::runtime_error("Invalid range");
+      throw std::range_error("Invalid range");
    }
    float range = b - a;
    float r = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
    return r * range - a;
 }
 
-float random::gauss(float mu, float sigma) {
+float gauss(float mu, float sigma) {
    std::normal_distribution<float> dist(mu, sigma);
    // Should gen be here?
    std::mt19937 gen(rd());
    return dist(gen);
 }
 
-std::vector<int> random::sample(int a, int b, unsigned k, bool unique) {
+std::vector<int> sample(int a, int b, unsigned k, bool unique) {
    if (unique && (b - a) < k) {
-      throw std::runtime_error("random vector unique but range is less than count");
+      throw std::range_error("random vector unique but range is less than count");
    }
 
    std::vector<int> rand_is;
@@ -94,6 +99,4 @@ std::vector<int> random::sample(int a, int b, unsigned k, bool unique) {
    return rand_is;
 }
 
-/*static*/ void random::initialize() {
-   std::srand(seed_value);
-}
+} // namespace randomcpp
