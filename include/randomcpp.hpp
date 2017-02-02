@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm> // std::random_shuffle
 #include <vector>
 #include <random>
 #include <stdexcept>
@@ -37,7 +38,7 @@ int randint(int a, int b);
 /*
  * Return a random element from the non-empty sequence seq. If seq is empty, raises logic_error.
  */
-template<typename TContainer>
+template <typename TContainer>
 typename TContainer::value_type choice(TContainer const & container) {
    auto begin(container.begin());
    auto size(std::distance(begin, container.end()));
@@ -52,13 +53,36 @@ typename TContainer::value_type choice(TContainer const & container) {
 /*
  * Return a random element from the non-empty sequence seq. If seq is empty, raises logic_error.
  */
-template<typename T, std::size_t N>
+template <typename T, std::size_t N>
 T choice(T const (&array)[N]) {
    if (!N) {
       throw std::logic_error("Cannot choose from an empty sequence");
    }
    auto rand_index(randrange(N));
    return array[rand_index];
+}
+
+/*
+ * Shuffle the sequence x in place.
+ *   Note that for even rather small len(x), the total number of permutations of x is larger than the period of most random number generators;
+ *   this implies that most permutations of a long sequence can never be generated.
+ */
+template <typename TContainer>
+void shuffle(TContainer * container) {
+   std::random_shuffle(container->begin(), container->end());
+}
+
+/*
+ * Shuffle the sequence x in place.
+ *   Note that for even rather small len(x), the total number of permutations of x is larger than the period of most random number generators;
+ *   this implies that most permutations of a long sequence can never be generated.
+ */
+template <typename T, std::size_t N>
+void shuffle(T (*array)[N]) {
+   for (unsigned i= N-1; i > 0; i--) {
+      unsigned j = randrange(i + 1);
+      std::swap((*array)[i], (*array)[j]);
+   }
 }
 
 // Other functions

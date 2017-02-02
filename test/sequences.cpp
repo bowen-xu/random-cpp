@@ -2,6 +2,7 @@
 
 #include <randomcpp.hpp>
 #include <vector>
+#include <array>
 #include <list>
 #include <map>
 #include <unordered_map>
@@ -66,6 +67,19 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
          REQUIRE(choice >= 4);
          REQUIRE(choice <= 14);
          REQUIRE(choice % 2 == 0);
+      }
+   }
+
+   SECTION ( "choice from array" ) {
+      std::array<int, 5> sequence;
+      for (int i=0; i < 5; i++) {
+         sequence[i] = i;
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto choice = randomcpp::choice(sequence);
+         REQUIRE(choice >= 0);
+         REQUIRE(choice <= 4);
       }
    }
 
@@ -165,6 +179,39 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
       for (unsigned i=0; i < 100; ++i) {
          auto choice = randomcpp::choice(sequence);
          REQUIRE(sequence.find(choice) != std::string::npos);
+      }
+   }
+
+   SECTION ( "shuffle integer vector" ) {
+      std::vector<int> sequence;
+      for (int i=5; i < 10; i++) {
+         sequence.push_back(i);
+      }
+
+      randomcpp::shuffle(&sequence);
+      int i=5;
+      for (auto const & r : sequence) {
+         REQUIRE(r != i++);
+      }
+   }
+
+   SECTION ( "shuffle string" ) {
+      std::string sequence("crazy");
+      std::string sequence_old(sequence);
+
+      REQUIRE(sequence == sequence_old);
+      randomcpp::shuffle(&sequence);
+      REQUIRE(sequence != sequence_old);
+   }
+
+   SECTION ( "shuffle integer dumb array" ) {
+      int sequence[] = {6, 8, 10, 12, 14, 16, 18, 20, 22};
+
+      randomcpp::shuffle(&sequence);
+      int i=6;
+      for (auto const & r : sequence) {
+         REQUIRE(r != i);
+         i += 2;
       }
    }
 }
