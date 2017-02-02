@@ -14,30 +14,6 @@ TEST_CASE( "Test for random", "[random]" ) {
       REQUIRE(rand_f > 0.0);
    }
 
-   SECTION ( "random integer inside positive range" ) {
-      int rand_i = random::randint(0, 5);
-      REQUIRE(rand_i <= 5);
-      REQUIRE(rand_i >= 0);
-   }
-
-   SECTION ( "random integer inside negative range" ) {
-      int rand_i = random::randint(-10, -5);
-      REQUIRE(rand_i <= -5);
-      REQUIRE(rand_i >= -10);
-   }
-
-   SECTION ( "random integer range with both" ) {
-      int rand_neg = random::randint(-5, 5);
-      REQUIRE(rand_neg <= 5);
-      REQUIRE(rand_neg >= -5);
-   }
-
-   SECTION ( "repeat random integers not equal" ) {
-      int rand_1 = random::randint(0, 100);
-      int rand_2 = random::randint(0, 100);
-      REQUIRE(rand_1 != rand_2);
-   }
-
    SECTION ( "random reset produces repeatable results" ) {
       random::reset();
       int rand_1 = random::randint(0, 100);

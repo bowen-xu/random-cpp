@@ -5,27 +5,38 @@
 
 class random {
 public:
+   // Bookkeeping functions:
    /*
-    * Initialize the basic random number generator.
-    *    Optional argument x can be any hashable object.
-    *    If x is omitted or None, current system time is used
+    * Initialize the random number generator.
+    *    If a is omitted or None, the current system time is used.
+    *    If a is an int, it is used directly.
     */
    static void seed();
-   static void seed(unsigned x);
+   static void seed(unsigned a);
 
    /*
     * Reseed the random generator with the stored seed.
     */
    static void reset();
+
+   // Functions for integers
+   /*
+    * Return a randomly selected element from range(start, stop, step).
+    */
+   static int randrange(int stop);
+   static int randrange(int start, int stop, int step=1);
+
+   /*
+    * Return a random integer N such that a <= N <= b. Alias for randrange(a, b+1).
+    */
+   static int randint(int a, int b);
+
+   // Other functions
    /*
     * Return value has a <probability_> chance of being true
     */
    static bool probability(float probability_);
 
-   /*
-    * Return a random integer N such that a <= N <= b.
-    */
-   static int randint(int a, int b);
 
    /*
     * Return a k length list of unique (or not) elements chosen from the range.

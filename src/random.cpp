@@ -12,8 +12,8 @@ void random::seed() {
    seed(static_cast<unsigned>(std::time(0)));
 }
 
-void random::seed(unsigned seed) {
-   random::seed_value = seed;
+void random::seed(unsigned a) {
+   random::seed_value = a;
    initialize();
 }
 
@@ -21,17 +21,46 @@ void random::reset() {
    initialize();
 }
 
-bool random::probability(float probability_) {
-   float r = uniform(0.0f, 1.0f);
-   return r <= probability_;
+int _randbelow(int n) {
+   return std::rand() % n;
+}
+
+int random::randrange(int stop) {
+   return randrange(0, stop);
+}
+
+int random::randrange(int start, int stop, int step /*=1*/) {
+   int width = stop - start;
+   if (step == 1 && width > 0) {
+      return start + _randbelow(width);
+   }
+   if (step == 1) {
+      throw std::range_error("empty range for randrange()");
+   }
+
+   int n;
+   if (step > 0) {
+      n = (width + step - 1) / step;
+   } else if (step < 0) {
+      n = (width + step + 1) / step;
+   } else {
+      throw std::range_error("zero step for randrange()");
+   }
+
+   if (n <= 0) {
+      throw std::range_error("empty range for randrange()");
+   }
+
+   return start + step * _randbelow(n);
 }
 
 int random::randint(int a, int b) {
-   if (b < a) {
-      throw std::runtime_error("Invalid range");
-   }
-   int range = b - a;
-   return std::rand() % range + a;
+   return randrange(a, b+1);
+}
+
+bool random::probability(float probability_) {
+   float r = uniform(0.0f, 1.0f);
+   return r <= probability_;
 }
 
 float random::uniform(float a, float b) {
