@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <random>
+#include <stdexcept>
+#include <iterator> // std::distance
 
 namespace randomcpp {
 
@@ -19,7 +21,7 @@ void seed(unsigned a);
  */
 void reset();
 
-// Functions for integers
+// Functions for integers:
 /*
  * Return a randomly selected element from range(start, stop, step).
  */
@@ -30,6 +32,34 @@ int randrange(int start, int stop, int step=1);
  * Return a random integer N such that a <= N <= b. Alias for randrange(a, b+1).
  */
 int randint(int a, int b);
+
+// Functions for sequences:
+/*
+ * Return a random element from the non-empty sequence seq. If seq is empty, raises logic_error.
+ */
+template<typename TContainer>
+typename TContainer::value_type choice(TContainer const & container) {
+   auto begin(container.begin());
+   auto size(std::distance(begin, container.end()));
+   if (!size) {
+      throw std::logic_error("Cannot choose from an empty sequence");
+   }
+   auto rand_index(randrange(size));
+   std::advance(begin, rand_index);
+   return *begin;
+}
+
+/*
+ * Return a random element from the non-empty sequence seq. If seq is empty, raises logic_error.
+ */
+template<typename T, std::size_t N>
+T choice(T const (&array)[N]) {
+   if (!N) {
+      throw std::logic_error("Cannot choose from an empty sequence");
+   }
+   auto rand_index(randrange(N));
+   return array[rand_index];
+}
 
 // Other functions
 /*

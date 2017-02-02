@@ -2,7 +2,6 @@
 
 #include <algorithm> // std::find
 #include <ctime>     // std::time
-#include <stdexcept> // std::range_error
 
 namespace randomcpp {
 

@@ -13,7 +13,8 @@ add_library(randomcpp SHARED ${SOURCE_FILES})
 set(TEST_FILES
         test/main.cpp
         test/random.cpp
-        test/integers.cpp)
+        test/integers.cpp
+        test/sequences.cpp)
 add_executable(randomcpp_test ${TEST_FILES})
 target_link_libraries(randomcpp_test randomcpp)
 
