@@ -289,4 +289,68 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
          }
       }
    }
+
+   SECTION ( "sample set" ) {
+      std::set<int> set;
+      for (int i=0; i < 60; i+=3) {
+         set.insert(i);
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_set(randomcpp::sample(set, 4));
+         for (auto const & el : sub_set) {
+            auto itr(set.find(el));
+            auto end(set.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample unordered_set" ) {
+      std::unordered_set<int> set;
+      for (int i=0; i < 60; i+=3) {
+         set.insert(i);
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_set(randomcpp::sample(set, 4));
+         for (auto const & el : sub_set) {
+            auto itr(set.find(el));
+            auto end(set.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample map" ) {
+      std::map<int, int> map;
+      for (int i=5; i < 10; i++) {
+         map.insert(std::make_pair(i, 42));
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_map(randomcpp::sample(map, 4));
+         for (auto const & el : sub_map) {
+            auto itr(map.find(el.first));
+            auto end(map.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample unordered_map" ) {
+      std::unordered_map<int, int> map;
+      for (int i=5; i < 10; i++) {
+         map.insert(std::make_pair(i, 42));
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_map(randomcpp::sample(map, 4));
+         for (auto const & el : sub_map) {
+            auto itr(map.find(el.first));
+            auto end(map.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
 }
