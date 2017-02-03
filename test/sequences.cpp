@@ -214,4 +214,79 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
          i += 2;
       }
    }
+
+   SECTION ( "sample is unique" ) {
+      std::string sequence("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+
+      std::set<char> uniqueness_checker;
+      for (unsigned i=0; i < 100; ++i) {
+         uniqueness_checker.clear();
+         auto sub_seq(randomcpp::sample(sequence, 4));
+         for (auto const & el : sub_seq) {
+            // Set maintains uniqueness for this sequence
+            REQUIRE(uniqueness_checker.insert(el).second);
+         }
+      }
+   }
+
+   SECTION ( "sample integer vector" ) {
+      std::vector<int> sequence;
+      for (int i=0; i < 60; i+=3) {
+         sequence.push_back(i);
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_seq(randomcpp::sample(sequence, 12));
+         for (auto const & el : sub_seq) {
+            auto itr(std::find(sequence.begin(), sequence.end(), el));
+            auto end(sequence.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample float vector" ) {
+      std::vector<float> sequence;
+      for (int i=0; i < 60; i+=3) {
+         sequence.push_back(i*1.5f);
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_seq(randomcpp::sample(sequence, 12));
+         for (auto const & el : sub_seq) {
+            auto itr(std::find(sequence.begin(), sequence.end(), el));
+            auto end(sequence.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample integer list" ) {
+      std::list<int> sequence;
+      for (int i=0; i < 60; i+=4) {
+         sequence.push_back(i);
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_seq(randomcpp::sample(sequence, 12));
+         for (auto const & el : sub_seq) {
+            auto itr(std::find(sequence.begin(), sequence.end(), el));
+            auto end(sequence.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
+
+   SECTION ( "sample string" ) {
+      std::string sequence("a suPeR LoNg String!");
+
+      for (unsigned i=0; i < 100; ++i) {
+         auto sub_seq(randomcpp::sample(sequence, 4));
+         for (auto const & el : sub_seq) {
+            auto itr(std::find(sequence.begin(), sequence.end(), el));
+            auto end(sequence.end());
+            REQUIRE(itr != end);
+         }
+      }
+   }
 }

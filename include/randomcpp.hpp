@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <stdexcept>
+#include <set>
 #include <iterator> // std::distance
 
 namespace randomcpp {
@@ -83,6 +84,33 @@ void shuffle(T (*array)[N]) {
       unsigned j = randrange(i + 1);
       std::swap((*array)[i], (*array)[j]);
    }
+}
+
+/*
+ * Return a k length list of unique elements chosen from the population sequence or set. Used for random sampling without replacement.
+ *   Returns a new list containing elements from the population while leaving the original population unchanged.
+ *   The resulting list is in selection order so that all sub-slices will also be valid random samples.
+ *   This allows raffle winners (the sample) to be partitioned into grand prize and second place winners (the subslices).
+ */
+template <typename TPopulation>
+TPopulation sample(TPopulation const & population, std::size_t k) {
+   std::set<unsigned> selected;
+   TPopulation result;
+   result.resize(k);
+   auto size(std::distance(population.begin(), population.end()));
+   auto result_itr(result.begin());
+   auto population_itr(population.begin());
+   for (unsigned i=0; i < k; i++) {
+      unsigned j = randrange(size);
+      while (!selected.insert(j).second) {
+         j = randrange(size);
+      }
+      population_itr = population.begin();
+      std::advance(population_itr, j);
+      *result_itr = *population_itr;
+      std::advance(result_itr, 1);
+   }
+   return std::move(result);
 }
 
 // Other functions
