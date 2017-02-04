@@ -353,4 +353,34 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
          }
       }
    }
+
+   SECTION ( "sample integer array" ) {
+      std::array<int, 30> sequence;
+      for (int i=0; i < 30; i++) {
+         sequence[i] = i;
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         std::array<int, 10> sub_seq;
+         randomcpp::sample(sequence, &sub_seq);
+         for (auto const & el : sub_seq) {
+            REQUIRE(el < 30);
+         }
+      }
+   }
+
+   SECTION ( "sample integer dumb array" ) {
+      int sequence[30];
+      for (int i=0; i < 30; i++) {
+         sequence[i] = i;
+      }
+
+      for (unsigned i=0; i < 100; ++i) {
+         int sub_seq[10];
+         randomcpp::sample(sequence, &sub_seq);
+         for (auto const & el : sub_seq) {
+            REQUIRE(el < 30);
+         }
+      }
+   }
 }
