@@ -66,18 +66,13 @@ float random() {
    return static_cast<float>(std::rand()) / RAND_MAX;
 }
 
+float uniform(float a, float b) {
+   return a + (b-a) * random();
+}
+
 bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;
-}
-
-float uniform(float a, float b) {
-   if (b < a) {
-      throw std::range_error("Invalid range");
-   }
-   float range = b - a;
-   float r = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
-   return r * range - a;
 }
 
 float gauss(float mu, float sigma) {
