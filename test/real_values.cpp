@@ -1,6 +1,23 @@
 #include <catch.hpp>
 
 #include <randomcpp.hpp>
+#include <map>
+
+static void display_histogram(std::map<int, int> const & hist) {
+   for (auto const & i : hist) {
+      std::printf("%d: %s\n", i.first, std::string(i.second / 15, '*').c_str());
+   }
+}
+
+static int key_for_max_value(std::map<int, int> const & hist) {
+   std::pair<int, int> max{0, -1};
+   for (auto const & i : hist) {
+      if (i.second > max.second) {
+         max = i;
+      }
+   }
+   return max.first;
+}
 
 TEST_CASE( "Test for random real values", "[real values]" ) {
    randomcpp::seed(1);
@@ -53,5 +70,35 @@ TEST_CASE( "Test for random real values", "[real values]" ) {
          REQUIRE(min < (min + 0.5));
          high += 1.3;
       }
+   }
+
+   SECTION ( "triangular dist (default)" ) {
+      randomcpp::reset();
+      std::map<int, int> histogram;
+      for (int n=0; n < 5000; n++) {
+         ++histogram[std::round(randomcpp::triangular()*10)];
+      }
+      //display_histogram(histogram);
+      REQUIRE(key_for_max_value(histogram) == 5);
+   }
+
+   SECTION ( "triangular dist (alternate range)" ) {
+      randomcpp::reset();
+      std::map<int, int> histogram;
+      for (int n=0; n < 5000; n++) {
+         ++histogram[std::round(randomcpp::triangular(0.0, 10.0))];
+      }
+      //display_histogram(histogram);
+      REQUIRE(key_for_max_value(histogram) == 5);
+   }
+
+   SECTION ( "triangular dist (alternate mode)" ) {
+      randomcpp::reset();
+      std::map<int, int> histogram;
+      for (int n=0; n < 5000; n++) {
+         ++histogram[std::round(randomcpp::triangular(0.0, 1.0, 0.2)*10)];
+      }
+      //display_histogram(histogram);
+      REQUIRE(key_for_max_value(histogram) == 2);
    }
 }

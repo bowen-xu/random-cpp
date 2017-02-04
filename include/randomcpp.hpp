@@ -190,6 +190,13 @@ float random();
  */
 float uniform(float a, float b);
 
+/*
+ * Return a random floating point number N such that low <= N <= high and with the specified mode between those bounds.
+ *   The low and high bounds default to zero and one.
+ *   The mode argument defaults to the midpoint between the bounds, giving a symmetric distribution.
+ */
+float triangular(float low = 0.0, float high = 1.0, float mode = 0.5);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true

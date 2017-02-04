@@ -70,6 +70,16 @@ float uniform(float a, float b) {
    return a + (b-a) * random();
 }
 
+float triangular(float low /*=0.0*/, float high /*=1.0*/, float c /*=0.5*/) {
+   auto u(random());
+   if (u > c) {
+      u = 1.0f - u;
+      c = 1.0f - c;
+      std::swap(low, high);
+   }
+   return low + (high - low) * std::pow((u * c), 0.5);
+}
+
 bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;
