@@ -149,28 +149,26 @@ TPopulation sample(TPopulation const & population, std::size_t k) {
    return std::move(result);
 }
 
-template <typename T, std::size_t N, std::size_t K>
-void sample(T const (&population)[N], T (*result)[K]) {
+template <typename T>
+void _sample_dumb_array(T const * population, T * result, std::size_t n, std::size_t k) {
    std::set<unsigned> selected;
-   for (unsigned i=0; i < K; i++) {
-      unsigned j = randrange(N);
+   for (unsigned i=0; i < k; i++) {
+      unsigned j = randrange(n);
       while (!selected.insert(j).second) {
-         j = randrange(N);
+         j = randrange(n);
       }
-      (*result)[i] = population[j];
+      *(result + i) = *(population + j);
    }
 }
 
 template <typename T, std::size_t N, std::size_t K>
+void sample(T const (&population)[N], T (*result)[K]) {
+   _sample_dumb_array<T>(&population[0], &(*result)[0], N, K);
+}
+
+template <typename T, std::size_t N, std::size_t K>
 void sample(std::array<T, N> const & population, std::array<T, K> * result) {
-   std::set<unsigned> selected;
-   for (unsigned i=0; i < K; i++) {
-      unsigned j = randrange(N);
-      while (!selected.insert(j).second) {
-         j = randrange(N);
-      }
-      (*result)[i] = population[j];
-   }
+   _sample_dumb_array<T>(population.data(), result->data(), N, K);
 }
 
 // Other functions
