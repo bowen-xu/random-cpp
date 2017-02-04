@@ -62,6 +62,10 @@ int randint(int a, int b) {
    return randrange(a, b + 1);
 }
 
+float random() {
+   return static_cast<float>(std::rand()) / RAND_MAX;
+}
+
 bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;

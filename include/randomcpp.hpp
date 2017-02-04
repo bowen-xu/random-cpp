@@ -175,6 +175,15 @@ void sample(std::array<T, N> const & population, std::array<T, K> * result) {
    _detail::sample_dumb_array<T>(population.data(), result->data(), N, K);
 }
 
+// The following functions generate specific real-valued distributions.
+//   Function parameters are named after the corresponding variables in the distribution’s equation,
+//   as used in common mathematical practice; most of these equations can be found in any statistics text.
+
+/*
+ * Return the next random floating point number in the range [0.0, 1.0).
+ */
+float random();
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true
