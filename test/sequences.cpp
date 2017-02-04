@@ -383,4 +383,25 @@ TEST_CASE( "Test for random sequences", "[sequences]" ) {
          }
       }
    }
+
+   SECTION ( "has_resize helper" ) {
+      REQUIRE(randomcpp::_detail::has_resize<std::vector<int>>::value);
+      REQUIRE(randomcpp::_detail::has_resize<std::vector<float>>::value);
+      REQUIRE(randomcpp::_detail::has_resize<std::list<int>>::value);
+      REQUIRE(randomcpp::_detail::has_resize<std::string>::value);
+      REQUIRE_FALSE(randomcpp::_detail::has_resize<std::set<int>>::value);
+      REQUIRE_FALSE(randomcpp::_detail::has_resize<std::unordered_set<int>>::value);
+      // Macro can't do commas
+      bool has;
+      has = randomcpp::_detail::has_resize<std::map<int, int>>::value;
+      REQUIRE_FALSE(has);
+      has = randomcpp::_detail::has_resize<std::map<int, std::string>>::value;
+      REQUIRE_FALSE(has);
+      has = randomcpp::_detail::has_resize<std::map<std::string, std::string>>::value;
+      REQUIRE_FALSE(has);
+      has = randomcpp::_detail::has_resize<std::unordered_map<std::string, std::string>>::value;
+      REQUIRE_FALSE(has);
+      has = randomcpp::_detail::has_resize<std::array<int, 10>>::value;
+      REQUIRE_FALSE(has);
+   }
 }
