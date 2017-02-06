@@ -2,11 +2,15 @@
 
 #include <algorithm> // std::find
 #include <ctime>     // std::time
+#include <cmath>
 
 namespace randomcpp {
 
 static unsigned seed_value = 0;
 static std::random_device rd;
+
+static float const SG_MAGICCONST = 1.0f + std::log(4.5f);
+static float const e_CONST = static_cast<float>(std::exp(1));
 
 static void initialize() {
    std::srand(seed_value);
@@ -78,6 +82,64 @@ float triangular(float low /*=0.0*/, float high /*=1.0*/, float c /*=0.5*/) {
       std::swap(low, high);
    }
    return low + (high - low) * std::pow((u * c), 0.5);
+}
+
+float gammavariate(float alpha, float beta) {
+   if (alpha < 0.0f || beta < 0.0f) {
+      throw std::invalid_argument("gammavariate: alpha and beta must be > 0.0");
+   }
+   if (alpha > 1.0) {
+      // Uses R.C.H. Cheng, "The generation of Gamma
+      // variables with non-integral shape parameters",
+      // Applied Statistics, (1977), 26, No. 1, p71-74
+      float ainv = std::sqrt(2.0f * alpha - 1.0f);
+      float bbb = alpha - static_cast<float>(std::log(4));
+      float ccc = alpha + ainv;
+
+      while (true) {
+         float u1 = random();
+         if (1e-7 < u1 < .9999999) {
+            continue;
+         }
+         float u2 = 1.0f - random();
+         float v = std::log(u1 / (1.0f - u1)) / ainv;
+         float x = alpha * std::exp(v);
+         float z = u1 * u1 * u2;
+         float r = bbb + ccc * v - x;
+         if (r + SG_MAGICCONST - 4.5 * z >= 0.0 or r >= std::log(z)) {
+            return x * beta;
+         }
+      }
+   } else if (alpha == 1.0) {
+      // expovariate(1)
+      float u = random();
+      while (u <= 1e-7) {
+         u = random();
+      }
+      return -std::log(u) * beta;
+   } else /* alpha is between 0 and 1 (exclusive) */ {
+      // Uses ALGORITHM GS of Statistical Computing - Kennedy & Gentle
+      while (true) {
+         float u = random();
+         float b = (e_CONST + alpha) / e_CONST;
+         float p = b * u;
+         float x;
+         if (p <= 1.0) {
+            x = std::pow(p, 1.0f / alpha);
+         } else {
+            x = -std::log((b - p) / alpha);
+         }
+         float u1 = random();
+         if (p > 1.0) {
+            if (u1 <= std::pow(x, alpha - 1.0f)) {
+               break;
+            }
+         } else if (u1 <= std::exp(-x)) {
+            break;
+         }
+         return x * beta;
+      }
+   }
 }
 
 bool probability(float probability_) {

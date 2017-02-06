@@ -197,6 +197,16 @@ float uniform(float a, float b);
  */
 float triangular(float low = 0.0, float high = 1.0, float mode = 0.5);
 
+/*
+ * Gamma distribution. (Not the gamma function!) Conditions on the parameters are alpha > 0 and beta > 0.
+ *   The probability distribution function is:
+ *
+ *              x ** (alpha - 1) * math.exp(-x / beta)
+ *    pdf(x) =  --------------------------------------
+ *                math.gamma(alpha) * beta ** alpha
+ */
+float gammavariate(float alpha, float beta);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true
