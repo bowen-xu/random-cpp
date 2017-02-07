@@ -102,6 +102,26 @@ TEST_CASE( "Test for random real values", "[real values]" ) {
       REQUIRE(key_for_max_value(histogram) == 2);
    }
 
+   SECTION ( "betavariate dist" ) {
+      randomcpp::reset();
+      std::map<int, int> histogram;
+      for (int n=0; n < 5000; n++) {
+         ++histogram[std::round(randomcpp::betavariate(2.0, 5.0)*10)];
+      }
+      //display_histogram(histogram);
+      REQUIRE(key_for_max_value(histogram) == 2);
+   }
+
+   SECTION ( "betavariate dist (alt)" ) {
+      randomcpp::reset();
+      std::map<int, int> histogram;
+      for (int n=0; n < 5000; n++) {
+         ++histogram[std::round(randomcpp::betavariate(2, 2)*10)];
+      }
+      //display_histogram(histogram);
+      REQUIRE(key_for_max_value(histogram) == 5);
+   }
+
    SECTION ( "gammavariate dist" ) {
       randomcpp::reset();
       std::map<int, int> histogram;

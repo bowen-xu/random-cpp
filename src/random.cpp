@@ -84,6 +84,14 @@ float triangular(float low /*=0.0*/, float high /*=1.0*/, float c /*=0.5*/) {
    return low + (high - low) * std::pow((u * c), 0.5);
 }
 
+float betavariate(float alpha, float beta) {
+   auto y = gammavariate(alpha, 1.0f);
+   if (y != 0.0f) {
+      y /= y + gammavariate(beta, 1.0f);
+   }
+   return y;
+}
+
 float gammavariate(float alpha, float beta) {
    if (alpha < 0.0f || beta < 0.0f) {
       throw std::invalid_argument("gammavariate: alpha and beta must be > 0.0");

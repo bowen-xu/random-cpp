@@ -198,6 +198,11 @@ float uniform(float a, float b);
 float triangular(float low = 0.0, float high = 1.0, float mode = 0.5);
 
 /*
+ * Beta distribution. Conditions on the parameters are alpha > 0 and beta > 0. Returned values range between 0 and 1.
+ */
+float betavariate(float alpha, float beta);
+
+/*
  * Gamma distribution. (Not the gamma function!) Conditions on the parameters are alpha > 0 and beta > 0.
  *   The probability distribution function is:
  *
