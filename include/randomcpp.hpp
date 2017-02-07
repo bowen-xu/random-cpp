@@ -219,6 +219,12 @@ float expovariate(float lambda);
  */
 float gammavariate(float alpha, float beta);
 
+/*
+ * Gaussian distribution. mu is the mean, and sigma is the standard deviation.
+ *   This is slightly faster than the normalvariate() function defined below.
+ */
+float gauss(float mu, float sigma);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true
@@ -232,9 +238,5 @@ bool probability(float probability_);
 std::vector<int> sample(int a, int b, unsigned k, bool unique = false);
 
 
-/*
- * Gaussian distribution. mu is the mean, and sigma is the standard deviation.
- */
-float gauss(float mu, float sigma);
 
 } // namespace randomcpp

@@ -61,13 +61,4 @@ TEST_CASE( "Test for random", "[random]" ) {
       randomcpp::reset();
       REQUIRE_THROWS(randomcpp::sample(0, 5, 20, true));
    }
-
-   SECTION ( "guassian random" ) {
-      randomcpp::reset();
-      std::map<int, int> hist;
-      for (int n=0; n<10000; ++n) {
-         ++hist[std::round(randomcpp::gauss(5.0, 2.0))];
-      }
-      // Validate histogram
-   }
 }

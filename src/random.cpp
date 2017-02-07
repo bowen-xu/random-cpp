@@ -158,16 +158,15 @@ float gammavariate(float alpha, float beta) {
    }
 }
 
+float gauss(float mu, float sigma) {
+   std::normal_distribution<float> dist(mu, sigma);
+   std::mt19937 gen(rd());
+   return dist(gen);
+}
+
 bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;
-}
-
-float gauss(float mu, float sigma) {
-   std::normal_distribution<float> dist(mu, sigma);
-   // Should gen be here?
-   std::mt19937 gen(rd());
-   return dist(gen);
 }
 
 std::vector<int> sample(int a, int b, unsigned k, bool unique) {

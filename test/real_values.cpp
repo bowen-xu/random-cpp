@@ -141,4 +141,21 @@ TEST_CASE( "Test for random real values", "[real values]" ) {
       //display_histogram(histogram);
       REQUIRE(key_for_max_value(histogram) == 1);
    }
+
+   SECTION ( "guassian dist" ) {
+      randomcpp::reset();
+      float mean = 0;
+      float stddev = 0;
+      for (int n=0; n < 10000; ++n) {
+         float u = randomcpp::gauss(5.0, 2.0);
+         mean += u;
+         float delta = u - 5.0f; // 5.0 is assume mean
+         stddev += delta*delta;
+      }
+      mean /= 10000;
+      stddev /= 10000;
+      stddev = std::sqrt(stddev);
+      REQUIRE(std::round(mean) == 5.0f);
+      REQUIRE(std::round(stddev) == 2.0f);
+   }
 }
