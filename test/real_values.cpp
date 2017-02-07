@@ -122,6 +122,16 @@ TEST_CASE( "Test for random real values", "[real values]" ) {
       REQUIRE(key_for_max_value(histogram) == 5);
    }
 
+   SECTION ( "expovariate dist (lambda=9)" ) {
+      randomcpp::reset();
+      float mean = 0;
+      for (int n=0; n < 5000; n++) {
+         mean += randomcpp::expovariate(1.0f/9);
+      }
+      mean /= 5000;
+      REQUIRE(std::round(mean) == 9.0f);
+   }
+
    SECTION ( "gammavariate dist" ) {
       randomcpp::reset();
       std::map<int, int> histogram;

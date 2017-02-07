@@ -203,6 +203,13 @@ float triangular(float low = 0.0, float high = 1.0, float mode = 0.5);
 float betavariate(float alpha, float beta);
 
 /*
+ * Exponential distribution. lambda is 1.0 divided by the desired mean. It should be nonzero.
+ *   Returned values range from 0 to positive infinity if lambda is positive,
+ *   and from negative infinity to 0 if lambda is negative.
+ */
+float expovariate(float lambda);
+
+/*
  * Gamma distribution. (Not the gamma function!) Conditions on the parameters are alpha > 0 and beta > 0.
  *   The probability distribution function is:
  *

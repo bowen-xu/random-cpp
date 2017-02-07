@@ -92,6 +92,14 @@ float betavariate(float alpha, float beta) {
    return y;
 }
 
+float expovariate(float lambda) {
+   float u;
+   do {
+      u = random();
+   } while (u <= 1e-7);
+   return -std::log(u) / lambda;
+}
+
 float gammavariate(float alpha, float beta) {
    if (alpha < 0.0f || beta < 0.0f) {
       throw std::invalid_argument("gammavariate: alpha and beta must be > 0.0");
