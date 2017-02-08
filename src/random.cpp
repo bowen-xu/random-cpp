@@ -10,6 +10,7 @@ static unsigned seed_value = 0;
 static std::random_device rd;
 
 static float const SG_MAGICCONST = 1.0f + std::log(4.5f);
+static float const NV_MAGICCONST = static_cast<float>(4.0f * std::exp(-0.5)/std::sqrt(2.0f));
 static float const e_CONST = static_cast<float>(std::exp(1));
 
 static void initialize() {
@@ -162,6 +163,20 @@ float gauss(float mu, float sigma) {
    std::normal_distribution<float> dist(mu, sigma);
    std::mt19937 gen(rd());
    return dist(gen);
+}
+
+float normalvariate(float mu, float sigma) {
+   float z;
+   while (true) {
+      float u1 = random();
+      float u2 = 1.0f - random();
+      z = NV_MAGICCONST * (u1 - 0.5f) / u2;
+      float zz = z*z/4.0f;
+      if (zz <= -std::log(u2)) {
+         break;
+      }
+   }
+   return mu + z*sigma;
 }
 
 bool probability(float probability_) {

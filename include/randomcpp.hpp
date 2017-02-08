@@ -225,6 +225,11 @@ float gammavariate(float alpha, float beta);
  */
 float gauss(float mu, float sigma);
 
+/*
+ * Normal distribution. mu is the mean, and sigma is the standard deviation.
+ */
+float normalvariate(float mu, float sigma);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true

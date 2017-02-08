@@ -158,4 +158,21 @@ TEST_CASE( "Test for random real values", "[real values]" ) {
       REQUIRE(std::round(mean) == 5.0f);
       REQUIRE(std::round(stddev) == 2.0f);
    }
+
+   SECTION ( "normalvariate dist" ) {
+      randomcpp::reset();
+      float mean = 0;
+      float stddev = 0;
+      for (int n=0; n < 10000; ++n) {
+         float u = randomcpp::normalvariate(8.0, 4.0);
+         mean += u;
+         float delta = u - 8.0f; // 8 is assume mean
+         stddev += delta*delta;
+      }
+      mean /= 10000;
+      stddev /= 10000;
+      stddev = std::sqrt(stddev);
+      REQUIRE(std::round(mean) == 8.0f);
+      REQUIRE(std::round(stddev) == 4.0f);
+   }
 }
