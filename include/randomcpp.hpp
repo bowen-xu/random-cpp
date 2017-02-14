@@ -237,6 +237,11 @@ float normalvariate(float mu, float sigma);
  */
 float vonmisesvariate(float mu, float kappa);
 
+/*
+ * Pareto distribution. alpha is the shape parameter.
+ */
+float paretovariate(float alpha);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true

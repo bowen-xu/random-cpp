@@ -209,7 +209,11 @@ float vonmisesvariate(float mu, float kappa) {
       theta = std::fmod(mu, 2.0f * M_PI) - std::acos(f);
    }
    return theta;
+}
 
+float paretovariate(float alpha) {
+   float u = 1.0f - random();
+   return 1.0f / std::pow(u, (1.0f/alpha));
 }
 
 bool probability(float probability_) {
