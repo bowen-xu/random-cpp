@@ -242,6 +242,11 @@ float vonmisesvariate(float mu, float kappa);
  */
 float paretovariate(float alpha);
 
+/*
+ * Weibull distribution. alpha is the scale parameter and beta is the shape parameter.
+ */
+float weibullvariate(float alpha, float beta);
+
 // Other functions
 /*
  * Return value has a <probability_> chance of being true

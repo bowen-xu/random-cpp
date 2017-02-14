@@ -216,6 +216,11 @@ float paretovariate(float alpha) {
    return 1.0f / std::pow(u, (1.0f/alpha));
 }
 
+float weibullvariate(float alpha, float beta) {
+   float u = 1.0f - random();
+   return alpha * std::pow(-std::log(u), 1.0f / beta);
+}
+
 bool probability(float probability_) {
    float r = uniform(0.0f, 1.0f);
    return r <= probability_;
