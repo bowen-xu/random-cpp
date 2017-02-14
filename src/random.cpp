@@ -11,7 +11,6 @@ static std::random_device rd;
 
 static float const SG_MAGICCONST = 1.0f + std::log(4.5f);
 static float const NV_MAGICCONST = static_cast<float>(4.0f * std::exp(-0.5)/std::sqrt(2.0f));
-static float const e_CONST = static_cast<float>(std::exp(1));
 
 static void initialize() {
    std::srand(seed_value);
@@ -138,7 +137,7 @@ float gammavariate(float alpha, float beta) {
       // Uses ALGORITHM GS of Statistical Computing - Kennedy & Gentle
       while (true) {
          float u = random();
-         float b = (e_CONST + alpha) / e_CONST;
+         float b = (M_E + alpha) / M_E;
          float p = b * u;
          float x;
          if (p <= 1.0) {
@@ -177,6 +176,40 @@ float normalvariate(float mu, float sigma) {
       }
    }
    return mu + z*sigma;
+}
+
+float vonmisesvariate(float mu, float kappa) {
+   if (kappa <= 1e-6) {
+      return 2.0f * M_PI * random();
+   }
+
+   float a = 1.0f + std::sqrt(1.0f + 4.0f * kappa * kappa);
+   float b = (a - std::sqrt(2.0f * a)) / (2.0f * kappa);
+   float r = (1.0f + b * b) / (2.0f * b);
+
+   float f;
+   while (true) {
+      float u1 = random();
+
+      float z = std::cos(M_PI * u1);
+      f = (1.0f + r * z) / (r + z);
+      float c = kappa * (r - f);
+      float u2 = random();
+
+      if (u2 < c * (2.0f - c) || u2 <= c * std::exp(1.0f - c)) {
+         break;
+      }
+   }
+
+   float u3 = random();
+   float theta;
+   if (u3 > 0.5f) {
+      theta = std::fmod(mu, 2.0f * M_PI) + std::acos(f);
+   } else {
+      theta = std::fmod(mu, 2.0f * M_PI) - std::acos(f);
+   }
+   return theta;
+
 }
 
 bool probability(float probability_) {
