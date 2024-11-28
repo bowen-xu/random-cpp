@@ -12,15 +12,14 @@ namespace randomcpp
 {
 
     inline static unsigned seed_value = 0;
-    inline static std::random_device rd;
-    inline static std::mt19937 gen(rd());
+    inline static std::mt19937 gen(seed_value);
 
     inline static float const SG_MAGICCONST = 1.0f + std::log(4.5f);
     inline static float const NV_MAGICCONST = static_cast<float>(4.0f * std::exp(-0.5) / std::sqrt(2.0f));
 
     static void initialize()
     {
-        std::srand(seed_value);
+        gen.seed(seed_value);
     }
 
     // Bookkeeping functions:
@@ -54,7 +53,7 @@ namespace randomcpp
      */
     inline int _randbelow(int n)
     {
-        return std::rand() % n;
+        return std::uniform_int_distribution<int>{0, n - 1}(gen);
     }
 
     inline int randrange(int start, int stop, int step = 1)
@@ -278,7 +277,7 @@ namespace randomcpp
      */
     inline float random()
     {
-        return static_cast<float>(std::rand()) / RAND_MAX;
+        return std::uniform_real_distribution<float>{0.0f, 1.0f}(gen);
     }
 
     /*
@@ -432,7 +431,6 @@ namespace randomcpp
     inline float gauss(float mu, float sigma)
     {
         std::normal_distribution<float> dist(mu, sigma);
-        std::mt19937 gen(rd());
         return dist(gen);
     }
 
