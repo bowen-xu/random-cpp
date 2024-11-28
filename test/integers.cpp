@@ -1,71 +1,88 @@
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
 #include <randomcpp.hpp>
 
-TEST_CASE( "Test for random integers", "[integers]" ) {
-   randomcpp::seed(1);
-
-   SECTION ( "random integer inside positive range" ) {
-      for (unsigned i=0; i < 100; ++i) {
-          int rand_i = randomcpp::randint(0, 5);
-          REQUIRE(rand_i <= 5);
-          REQUIRE(rand_i >= 0);
-      }
+class RandomIntegersTest : public ::testing::Test
+{
+protected:
+   // This function runs once for the entire test suite before any tests are run.
+   static void SetUpTestSuite()
+   {
+      randomcpp::seed(1); // Set the seed once for all tests
    }
 
-   SECTION ( "random integer inside negative range" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_i = randomcpp::randint(-10, -5);
-         REQUIRE(rand_i <= -5);
-         REQUIRE(rand_i >= -10);
-      }
+   // Optionally, you can use SetUp() to reset the seed for each test case (if needed)
+   void SetUp() override
+   {
+      randomcpp::reset(); // Reset random state before each test
    }
+};
 
-   SECTION ( "random range stop" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_i = randomcpp::randrange(5);
-         REQUIRE(rand_i < 5);
-         REQUIRE(rand_i >= 0);
-      }
+TEST_F(RandomIntegersTest, RandomIntegerInsidePositiveRange)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_i = randomcpp::randint(0, 5);
+      EXPECT_LE(rand_i, 5);
+      EXPECT_GE(rand_i, 0);
    }
+}
 
-   SECTION ( "random range start, stop" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_i = randomcpp::randrange(1, 6);
-         REQUIRE(rand_i < 6);
-         REQUIRE(rand_i >= 1);
-      }
+TEST_F(RandomIntegersTest, RandomIntegerInsideNegativeRange)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_i = randomcpp::randint(-10, -5);
+      EXPECT_LE(rand_i, -5);
+      EXPECT_GE(rand_i, -10);
    }
+}
 
-   SECTION ( "random range start, stop, step (odd)" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_i = randomcpp::randrange(1, 6, 2);
-         REQUIRE(rand_i < 6);
-         REQUIRE(rand_i >= 1);
-         REQUIRE(rand_i % 2 == 1);
-      }
+TEST_F(RandomIntegersTest, RandomRangeStop)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_i = randomcpp::randrange(5);
+      EXPECT_LT(rand_i, 5);
+      EXPECT_GE(rand_i, 0);
    }
+}
 
-   SECTION ( "random range start, stop, step (even)" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_i = randomcpp::randrange(0, 7, 2);
-         REQUIRE(rand_i <= 6);
-         REQUIRE(rand_i >= 0);
-         REQUIRE(rand_i % 2 == 0);
-      }
+TEST_F(RandomIntegersTest, RandomRangeStartStop)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_i = randomcpp::randrange(1, 6);
+      EXPECT_LT(rand_i, 6);
+      EXPECT_GE(rand_i, 1);
    }
+}
 
-   SECTION ( "random integer range with both" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         int rand_neg = randomcpp::randint(-5, 5);
-         REQUIRE(rand_neg <= 5);
-         REQUIRE(rand_neg >= -5);
-      }
+TEST_F(RandomIntegersTest, RandomRangeStartStopStepOdd)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_i = randomcpp::randrange(1, 6, 2);
+      EXPECT_LT(rand_i, 6);
+      EXPECT_GE(rand_i, 1);
+      EXPECT_EQ(rand_i % 2, 1); // Odd
    }
+}
 
-   SECTION ( "repeat random integers not equal" ) {
-      for (unsigned i=0; i < 100; ++i) {
-         REQUIRE(randomcpp::randint(0, 1000) != randomcpp::randint(0, 1000));
-      }
+TEST_F(RandomIntegersTest, RandomIntegerRangeWithBoth)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      int rand_neg = randomcpp::randint(-5, 5);
+      EXPECT_LE(rand_neg, 5);
+      EXPECT_GE(rand_neg, -5);
+   }
+}
+
+TEST_F(RandomIntegersTest, RepeatRandomIntegersNotEqual)
+{
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      EXPECT_NE(randomcpp::randint(0, 1000), randomcpp::randint(0, 1000));
    }
 }
