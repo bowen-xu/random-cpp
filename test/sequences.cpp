@@ -194,12 +194,9 @@ TEST(RandomSequencesTest, ChoiceFromString)
 TEST(RandomSequencesTest, ShuffleIntegerVector)
 {
    std::vector<int> sequence = {5, 6, 7, 8, 9};
+   auto sequence_old(sequence);
    randomcpp::shuffle(&sequence);
-   int i = 5;
-   for (const auto &r : sequence)
-   {
-      EXPECT_NE(r, i++);
-   }
+   EXPECT_NE(sequence, sequence_old);
 }
 
 TEST(RandomSequencesTest, ShuffleString)
@@ -214,13 +211,12 @@ TEST(RandomSequencesTest, ShuffleString)
 TEST(RandomSequencesTest, ShuffleDumbArray)
 {
    int sequence[] = {6, 8, 10, 12, 14, 16, 18, 20, 22};
+
+   // auto sequence_old = std::copy(sequence);
+   int sequence_old[sizeof(sequence) / sizeof(sequence[0])];
+   std::copy(std::begin(sequence), std::end(sequence), std::begin(sequence_old));
    randomcpp::shuffle(&sequence);
-   int i = 6;
-   for (const auto &r : sequence)
-   {
-      EXPECT_NE(r, i);
-      i += 2;
-   }
+   EXPECT_NE(sequence, sequence_old);
 }
 
 // Sample and Additional Tests

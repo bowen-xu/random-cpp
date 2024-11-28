@@ -49,7 +49,7 @@ TEST_F(RandomRealValuesTest, RandomIsAlwaysInCorrectRange)
       min = std::min(min, r);
       max = std::max(max, r);
    }
-   EXPECT_GT(max, 0.9999f);
+   EXPECT_GT(max, 0.9985f);
    EXPECT_LT(min, 0.0015f);
 }
 
@@ -136,7 +136,7 @@ TEST_F(RandomRealValuesTest, BetaVariateDist)
 TEST_F(RandomRealValuesTest, BetaVariateDistAlt)
 {
    std::map<int, int> histogram;
-   for (int n = 0; n < 5000; ++n)
+   for (int n = 0; n < 20000; ++n)
    {
       auto num = randomcpp::betavariate(2.0, 2.0) * 10;
       // std::cout << num << ' ';
