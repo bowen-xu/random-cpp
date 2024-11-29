@@ -1,6 +1,6 @@
 # random-cpp
 
-C++ implementation of Python random - generate pseudo-random numbers for C++
+C++ header-only library for generating pseudo-random numbers with Python-like APIs.
 
 ## To use the package
 
