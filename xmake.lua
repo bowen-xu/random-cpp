@@ -1,11 +1,12 @@
 package("randomcpp")
     set_description("C++ library for random number generation with Pythin-like APIs")
-    set_version("1.0.0")
+    set_version("1.0.0", "7d8d58cab5bb0f636c7d59e06aa91d29df25c931")
 
     set_homepage("https://github.com/bowen-xu/random-cpp")
     add_urls("https://github.com/bowen-xu/random-cpp.git")
     set_license("MIT")
-    set_kind("library")
+    set_kind("library", {headeronly = true})
+    
     add_includedirs("./include", {public = true})
     -- on_install("macosx", "linux", function (package)
     --     import("package.tools.autoconf").install(package)
