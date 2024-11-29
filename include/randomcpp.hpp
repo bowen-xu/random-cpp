@@ -421,6 +421,7 @@ namespace randomcpp
                 return x * beta;
             }
         }
+        return 0.0;
     }
 
     /*
