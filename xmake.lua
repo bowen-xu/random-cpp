@@ -1,5 +1,6 @@
 package("randomcpp")
     set_description("C++ library for random number generation with Pythin-like APIs")
+    set_version("1.0.0")
 
     set_homepage("https://github.com/bowen-xu/random-cpp")
     add_urls("https://github.com/bowen-xu/random-cpp.git")
