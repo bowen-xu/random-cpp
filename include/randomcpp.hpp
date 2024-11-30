@@ -11,11 +11,12 @@
 namespace randomcpp
 {
 
-    inline static unsigned seed_value = 0;
-    inline static std::mt19937 gen(seed_value);
+    // static unsigned seed_value;
+    inline unsigned seed_value = 0;
+    inline std::mt19937 gen(seed_value);
 
-    inline static float const SG_MAGICCONST = 1.0f + std::log(4.5f);
-    inline static float const NV_MAGICCONST = static_cast<float>(4.0f * std::exp(-0.5) / std::sqrt(2.0f));
+    inline float const SG_MAGICCONST = 1.0f + std::log(4.5f);
+    inline float const NV_MAGICCONST = static_cast<float>(4.0f * std::exp(-0.5) / std::sqrt(2.0f));
 
     static void initialize()
     {
