@@ -63,7 +63,7 @@ TEST_F(RandomTest, RandomVectorAllWithinRange)
 TEST_F(RandomTest, RandomVectorAllUnique)
 {
    randomcpp::reset();
-   auto rand_set = randomcpp::sample(0, 100, 20, true);
+   auto rand_set = randomcpp::sample(100, 200, 20, true);
    // Check the size
    EXPECT_EQ(rand_set.size(), 20);
    // Check for uniqueness
@@ -72,8 +72,25 @@ TEST_F(RandomTest, RandomVectorAllUnique)
    // Check the range
    for (auto i : rand_set)
    {
-      EXPECT_LE(i, 100);
-      EXPECT_GE(i, 0);
+      EXPECT_LE(i, 200);
+      EXPECT_GE(i, 100);
+   }
+}
+
+TEST_F(RandomTest, RandomVectorAllUnique2)
+{
+   randomcpp::reset();
+   auto rand_set = randomcpp::sample(100, 2000, 20, true);
+   // Check the size
+   EXPECT_EQ(rand_set.size(), 20);
+   // Check for uniqueness
+   std::sort(rand_set.begin(), rand_set.end());
+   EXPECT_EQ(std::adjacent_find(rand_set.begin(), rand_set.end()), rand_set.end());
+   // Check the range
+   for (auto i : rand_set)
+   {
+      EXPECT_LE(i, 2000);
+      EXPECT_GE(i, 100);
    }
 }
 

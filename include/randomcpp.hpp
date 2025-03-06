@@ -7,6 +7,7 @@
 #include <set>
 #include <iterator> // std::distance
 #include <array>
+#include <unordered_map>
 
 namespace randomcpp
 {
@@ -195,10 +196,22 @@ namespace randomcpp
             template <typename U>
             static char Test(resize_signature<U, &U::resize> *);
 
+
             template <typename U>
             static int Test(...);
 
-            static const bool value = sizeof(Test<T>(0)) == sizeof(char);
+            static inline const bool value = sizeof(Test<T>(0)) == sizeof(char);
+            
+        /* Another optional implementation */
+        // private: 
+        //     template <typename U>
+        //     static auto Test(int) -> decltype(std::declval<U>().resize(std::declval<std::size_t>()), std::true_type{});
+
+        //     template <typename U>
+        //     static std::false_type Test(...);
+
+        // public:
+        //     static constexpr bool value = decltype(Test<T>(0))::value;
         };
 
     } // namespace _detail
@@ -299,7 +312,7 @@ namespace randomcpp
     inline float triangular(float low = 0.0, float high = 1.0, float mode = 0.5)
     {
         auto u(random());
-        auto& c = mode;
+        auto &c = mode;
         if (u > c)
         {
             u = 1.0f - u;
@@ -535,21 +548,57 @@ namespace randomcpp
 
     /*
      * Return a k length list of unique (or not) elements chosen from the range.
+     * If the range is empty, raises a range_error.
+     * If sampling without replacement, the algorithm to use is determined by the parameter `k`:
+     * - If k << n (k < n/10), the hash-based Fisher-Yates shuffle is used.
+     * - Otherweise, the array-based Fisher-Yates shuffle is used.
      */
     inline std::vector<int> sample(int a, int b, unsigned k, bool unique = false)
     {
-        if (unique && (b - a) < k)
+        if (unique && (b - a) + 1 < k)
         {
             throw std::range_error("random vector unique but range is less than count");
         }
 
         std::vector<int> rand_is;
-        while (rand_is.size() < k)
+        if (!unique)
         {
-            int rand_i = randint(a, b);
-            if (!unique || std::find(rand_is.begin(), rand_is.end(), rand_i) == rand_is.end())
+            for (unsigned i = 0; i < k; i++)
             {
+                int rand_i = randint(a, b);
                 rand_is.push_back(rand_i);
+            }
+        }
+        else
+        {
+            int n = b - a;
+            if (k < n / 10)
+            {
+                std::unordered_map<int, int> map{};
+                for (int i = 0; i < k; ++i)
+                {
+                    int j = randint(i, n - 1);
+
+                    int valJ = (map.count(j) ? map[j] : j);
+                    int valI = (map.count(n - 1) ? map[n - 1] : (n - 1));
+
+                    rand_is.push_back(a + valJ);
+
+                    map[j] = valI;
+
+                    --n;
+                }
+            }
+            else
+            {
+                std::vector<int> all;
+                all.reserve(n);
+                for (int i = a; i <= b; ++i)
+                {
+                    all.push_back(i);
+                }
+                shuffle(&all);
+                std::copy(all.begin(), all.begin() + k, std::back_inserter(rand_is));
             }
         }
         return rand_is;
