@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm> // std::random_shuffle
+#include <ctime>
 #include <vector>
 #include <random>
 #include <stdexcept>
