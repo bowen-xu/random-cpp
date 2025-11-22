@@ -379,7 +379,7 @@ namespace randomcpp
             while (true)
             {
                 float u1 = random();
-                if (1e-7 < u1 < .9999999)
+                if (u1 <= 1e-7f || u1 >= 0.9999999f)
                 {
                     continue;
                 }
